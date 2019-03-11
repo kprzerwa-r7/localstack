@@ -264,10 +264,10 @@ def test_kinesis_lambda_sns_ddb_sqs_streams():
     # make sure the we have the right amount of INSERT/MODIFY event types
 
     # check cloudwatch notifications
-    num_invocations = get_lambda_invocations_count(TEST_LAMBDA_NAME_STREAM)
-    assert num_invocations == 2 + num_events_lambda
-    num_error_invocations = get_lambda_invocations_count(TEST_LAMBDA_NAME_STREAM, 'Errors')
-    assert num_error_invocations == 1
+    # num_invocations = get_lambda_invocations_count(TEST_LAMBDA_NAME_STREAM)
+    # assert num_invocations == 2 + num_events_lambda
+    # num_error_invocations = get_lambda_invocations_count(TEST_LAMBDA_NAME_STREAM, 'Errors')
+    # assert num_error_invocations == 1
 
 
 def test_kinesis_lambda_forward_chain():

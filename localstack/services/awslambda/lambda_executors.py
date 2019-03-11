@@ -5,6 +5,8 @@ import time
 import logging
 import threading
 import subprocess
+from threading import Thread
+from queue import Queue as que, Empty
 from multiprocessing import Process, Queue
 try:
     from shlex import quote as cmd_quote
@@ -111,11 +113,25 @@ class LambdaExecutor(object):
             logEvents=log_events
         )
 
+    def enqueue_output(self, out, queue):
+        while True:
+            queue.put(out.readline())
+
     def run_lambda_executor(self, cmd, env_vars={}, asynchronous=False):
         process = run(cmd, asynchronous=True, stderr=subprocess.PIPE, outfile=subprocess.PIPE, env_vars=env_vars)
         if asynchronous:
             result = '{"asynchronous": "%s"}' % asynchronous
-            log_output = 'Lambda executed asynchronously'
+            log_output = 'Lambda executed asynchronously. Log output:\n'
+            q = que()
+            t = Thread(target=self.enqueue_output, args=(process.stderr, q))
+            t.daemon = True
+            t.start()
+
+            try:
+                while True:
+                    log_output += q.get(timeout=5)
+            except Empty:
+                log_output += ';'
         else:
             result, log_output = process.communicate()
             result = to_str(result).strip()

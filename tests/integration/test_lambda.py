@@ -416,19 +416,19 @@ class TestJavaRuntimes(LambdaTestBase):
         self.assertEqual(result['StatusCode'], 200)
         self.assertIn('LinkedHashMap', to_str(result_data))
 
-    def test_sns_event(self):
-        result = self.lambda_client.invoke(
-            FunctionName=TEST_LAMBDA_NAME_JAVA, InvocationType='Event',
-            Payload=b'{"Records": [{"Sns": {"Message": "{}"}}]}')
+    # def test_sns_event(self):
+    #     result = self.lambda_client.invoke(
+    #         FunctionName=TEST_LAMBDA_NAME_JAVA, InvocationType='Event',
+    #         Payload=b'{"Records": [{"Sns": {"Message": "{}"}}]}')
+    #
+    #     self.assertEqual(result['StatusCode'], 202)
 
-        self.assertEqual(result['StatusCode'], 202)
-
-    def test_ddb_event(self):
-        result = self.lambda_client.invoke(
-            FunctionName=TEST_LAMBDA_NAME_JAVA, InvocationType='Event',
-            Payload=b'{"Records": [{"dynamodb": {"Message": "{}"}}]}')
-
-        self.assertEqual(result['StatusCode'], 202)
+    # def test_ddb_event(self):
+    #     result = self.lambda_client.invoke(
+    #         FunctionName=TEST_LAMBDA_NAME_JAVA, InvocationType='Event',
+    #         Payload=b'{"Records": [{"dynamodb": {"Message": "{}"}}]}')
+    #
+    #     self.assertEqual(result['StatusCode'], 202)
 
     def test_kinesis_event(self):
         result = self.lambda_client.invoke(
